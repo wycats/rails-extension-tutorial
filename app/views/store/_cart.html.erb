@@ -1,0 +1,19 @@
+<!-- START_HIGHLIGHT -->
+<div class="cart-title"><%= I18n.t 'layout.cart.title' %></div>
+<!-- END_HIGHLIGHT -->
+<table>
+  <%= render(:partial => "cart_item", :collection => cart.items) %>  
+  
+  <tr class="total-line">
+    <td colspan="2">Total</td>
+    <td class="total-cell"><%= number_to_currency(cart.total_price) %></td>
+  </tr>
+
+</table>
+  
+<!-- START_HIGHLIGHT -->
+<%= button_to I18n.t('layout.cart.button.checkout'), :action => 'checkout' %>
+<!-- END_HIGHLIGHT -->
+<!-- START_HIGHLIGHT -->
+<%= button_to I18n.t('layout.cart.button.empty'), :action => :empty_cart %>
+<!-- END_HIGHLIGHT -->

@@ -1,0 +1,21 @@
+<!-- START_HIGHLIGHT -->
+<h1><%= I18n.t 'main.title' %></h1>
+<!-- END_HIGHLIGHT -->
+
+<% for product in @products -%>
+  <div class="entry">
+    <%= image_tag(product.image_url) %>
+    <h3><%=h product.title %></h3>
+    <%= product.description %>
+    <div class="price-line">
+    <span class="price"><%= number_to_currency(product.price) %></span>
+    <!-- START:form_remote_tag -->
+    <% form_remote_tag :url => {:action => 'add_to_cart', :id => product} do %>
+<!-- START_HIGHLIGHT -->
+      <%= submit_tag I18n.t('main.button.add') %>
+<!-- END_HIGHLIGHT -->
+    <% end %>
+    <!-- END:form_remote_tag -->
+    </div>
+  </div>
+<% end %>
