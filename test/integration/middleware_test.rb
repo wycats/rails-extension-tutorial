@@ -30,6 +30,6 @@ class MiddlewareTest < ActionController::IntegrationTest
     visit "/admin/logout"
 
     visit "/admin"
-    assert_equal current_url, "/admin/login"
+    assert_match %r{/admin/login$}, current_url
   end
 end

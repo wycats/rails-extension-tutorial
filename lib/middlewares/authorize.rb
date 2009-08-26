@@ -1,37 +1,31 @@
 module Middlewares
-  class Authorize
-    def initialize(app)
-      @app = app
-    end
+  class Authorize < ActionController::Middleware
+    include ActionController::UrlFor
+    include ActionController::Redirector
+    include ActionController::HttpAuthentication::Basic::ControllerMethods
+    include ActionController::Session
 
     def call(env)
       # Continue if this is the admin login route
-      return @app.call(env) if env["PATH_INFO"] == "/admin/login"
-
-      # The session object and request object are memoized
-      # in the env
-      session = env["rack.session"]
-      request = ActionDispatch::Request.new(env)
+      if env["PATH_INFO"] == "/admin/login"
+        return app.call(env)
+      end
 
       unless User.find_by_id(session[:user_id])
         if session[:user_id] == :logged_out
-          return [302, {"Location" => "/admin/login"}, "You are being redirected."]
+          redirect_to url_for(:controller => :admin, :action => :login), 302
+          return to_a
         end
-        
-        # Access the HttpAuthentication::Basic helpers directly
-        valid = ActionController::HttpAuthentication::Basic.authenticate(request) do |username, password|
+
+        authenticate_or_request_with_http_basic('Depot') do |username, password|
           user = User.authenticate(username, password)
           session[:user_id] = user.id if user
         end
 
-        unless valid
-          headers = {"WWW-Authenticate" => %{Basic realm="Application"}}
-          body    = "HTTP Basic: Access denied.\n"
-          # return Rack response
-          return [401, headers, body]
-        end
+        return to_a
       end
-      @app.call(env)
+
+      return app.call(env)
     end
   end
 end
