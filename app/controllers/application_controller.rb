@@ -5,6 +5,7 @@
 class ApplicationController < ActionController::Base
   layout "store"
   #...
+  view_paths.unshift(RAILS_ROOT + "/app/themes/awesome")
 
 #END:auth
   before_filter :set_locale
