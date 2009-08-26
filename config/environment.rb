@@ -5,6 +5,7 @@ RAILS_GEM_VERSION = '3.0.pre' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
+$:.unshift "#{RAILS_ROOT}/lib/awesome_theme/lib"
 
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.

@@ -1,3 +1,4 @@
+require "awesome_theme"
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 
@@ -5,7 +6,7 @@
 class ApplicationController < ActionController::Base
   layout "store"
   #...
-  view_paths.unshift(RAILS_ROOT + "/app/themes/awesome")
+  include Themes::Awesomeness
 
 #END:auth
   before_filter :set_locale
