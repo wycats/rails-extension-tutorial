@@ -4,7 +4,6 @@
 #START:auth
 class ApplicationController < ActionController::Base
   layout "store"
-  before_filter :authorize, :except => :login
   #...
 
 #END:auth
@@ -17,24 +16,6 @@ class ApplicationController < ActionController::Base
 #START:auth
 
 protected
-  def authorize
-    unless User.find_by_id(session[:user_id])
-      #START_HIGHLIGHT
-      if session[:user_id] != :logged_out
-        #START:basic
-        authenticate_or_request_with_http_basic('Depot') do |username, password|
-          user = User.authenticate(username, password)
-          session[:user_id] = user.id if user
-        end
-        #END:basic
-      else
-        flash[:notice] = "Please log in"
-        redirect_to :controller => 'admin', :action => 'login'
-      end
-      #END_HIGHLIGHT
-    end
-  end
-
   def set_locale
     session[:locale] = params[:locale] if params[:locale]
     I18n.locale = session[:locale] || I18n.default_locale
